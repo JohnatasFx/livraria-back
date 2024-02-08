@@ -83,4 +83,29 @@ const updateBook = async (req: Request, res: Response) => {
     }
 }
 
-export {createBook, updateBook};
+const getBook = async (req: Request, res: Response) => {
+    const result = updateBookSchema.safeParse({id: req.query?.id})
+    if(!result.success){
+        res.status(400).json({message: 'Dados inválidos.'});
+        return;
+    }
+
+    try {
+        const {id} = result.data;
+        const book = await prisma.livro.findUnique({where: {id}});
+
+        if(!book){
+            res.status(404).json({message: 'Livro não encontrado.'});
+            return;
+        }
+
+        res.status(200).json(book);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message: 'Erro ao buscar o livro'});
+        return;
+    }
+}
+
+export {createBook, updateBook, getBook};
