@@ -108,4 +108,21 @@ const getBook = async (req: Request, res: Response) => {
     }
 }
 
-export {createBook, updateBook, getBook};
+const getAllBooks = async (req: Request, res: Response) => {
+    try {
+        const books = await prisma.livro.findMany();
+        if(!books){
+            res.status(404).json({message: 'Não foi possivel encontrar livros.'});
+            return;
+        }
+
+        res.status(200).json(books);
+        return;
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message: 'Erro ao encontrar livros.'});
+    }
+}
+
+export {createBook, updateBook, getBook, getAllBooks};
