@@ -12,9 +12,16 @@ const createBookSchema = z.object({
 });
 
 const createBook = async ( req: Request, res: Response) => {
-    const {nomeLivro, nomeAutor, preco} = req.body;
+    const result = createBookSchema.safeParse(req.body);
+
+    if(!result.success){
+        res.status(400).json({message: 'Dados inválidos.'})
+        return;
+    }
 
     try {
+        const {nomeLivro, nomeAutor, preco} = result.data;
+        
         const newBook: Prisma.LivroCreateInput = {nomeLivro, nomeAutor, preco};
 
         const book = await prisma.livro.create({data: newBook});
