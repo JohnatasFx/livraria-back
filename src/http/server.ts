@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
+import { createBook } from '../controllers/book';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,6 +10,8 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use(bodyParser.json());
+
+app.post("/book", createBook);
 
 app.listen(port, ()=>{
     console.log(`Server rodando na porta ${port}!`);
