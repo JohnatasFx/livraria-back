@@ -125,4 +125,40 @@ const getAllBooks = async (req: Request, res: Response) => {
     }
 }
 
-export {createBook, updateBook, getBook, getAllBooks};
+const deleteBook = async (req: Request, res: Response) => {
+    const result = updateBookSchema.safeParse({id: req.query.id});
+
+    if(!result.success){
+        res.status(400).json({message: 'Dados invalidos'});
+        return;
+    }
+
+    try {
+        const {id} = result.data;
+
+        const bookExist = prisma.livro.findUnique({where: {id: id as string}});
+
+        if(!bookExist){
+            res.status(404).json({message: 'Livro não encontrado'});
+            return;
+        }
+
+        const book = await prisma.livro.delete({where: {id: id as string}});
+
+        if(!book){
+            res.status(500).json({message: 'Erro ao deletar livro'});
+            return
+        }
+
+        res.status(200).json(book.id);
+        return;
+
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({message: 'Erro ao deletar livro.'});
+        return;
+    }
+
+}
+
+export {createBook, updateBook, getBook, getAllBooks, deleteBook};

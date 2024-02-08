@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import { createBook, updateBook, getBook, getAllBooks } from '../controllers/book';
+import { createBook, updateBook, getBook, getAllBooks, deleteBook} from '../controllers/book';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -18,6 +18,8 @@ app.put("/book", updateBook);
 app.get("/book", getBook);
 
 app.get("/book/all", getAllBooks);
+
+app.delete("/book", deleteBook);
 
 app.listen(port, ()=>{
     console.log(`Server rodando na porta ${port}!`);
