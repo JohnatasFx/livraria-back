@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { createBook, updateBook, getBook, getAllBooks, deleteBook} from '../controllers/book';
+import cors from "cors";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,6 +10,7 @@ const port = process.env.PORT || 3000;
 //     res.send("Hello World!");
 // });
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.post("/book", createBook);
